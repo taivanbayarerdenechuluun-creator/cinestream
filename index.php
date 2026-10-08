@@ -50,9 +50,11 @@ $stmt = $db->query(
         id,
         title,
         description,
+        tagline,
         release_year,
         duration,
         poster,
+        backdrop,
         rating,
         is_premium
      FROM movies
@@ -251,7 +253,7 @@ require_once __DIR__ . '/includes/header.php';
                 #0b0b0f 0%,
                 transparent 35%
             ),
-            url("<?= e($heroMovie['poster'] ?? '') ?>");
+            url("<?= e(!empty($heroMovie['backdrop']) ? $heroMovie['backdrop'] : ($heroMovie['poster'] ?? '')) ?>");
 
         background-size: cover;
         background-position: center;
@@ -764,6 +766,12 @@ require_once __DIR__ . '/includes/header.php';
                     <h1 class="hero-title">
                         <?= e($heroMovie['title']) ?>
                     </h1>
+
+                    <?php if (!empty($heroMovie['tagline'])): ?>
+                        <div style="color:#e50914;font-style:italic;font-size:16px;margin:-10px 0 16px;font-weight:600;">
+                            &ldquo;<?= e($heroMovie['tagline']) ?>&rdquo;
+                        </div>
+                    <?php endif; ?>
 
                     <div class="hero-meta">
 

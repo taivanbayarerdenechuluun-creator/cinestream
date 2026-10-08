@@ -104,11 +104,15 @@ if ($search !== '') {
         (
             m.title LIKE :search_title
             OR m.description LIKE :search_description
+            OR m.director LIKE :search_director
+            OR m.cast_data LIKE :search_cast
         )
     ';
 
     $params[':search_title'] = '%' . $search . '%';
     $params[':search_description'] = '%' . $search . '%';
+    $params[':search_director'] = '%' . $search . '%';
+    $params[':search_cast'] = '%' . $search . '%';
 }
 
 

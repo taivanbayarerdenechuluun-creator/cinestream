@@ -27,6 +27,8 @@ if ($query !== '') {
          WHERE
             title LIKE :title
             OR description LIKE :description
+            OR director LIKE :director
+            OR cast_data LIKE :cast
             OR CAST(release_year AS CHAR) LIKE :year
          ORDER BY
             rating DESC,
@@ -37,6 +39,8 @@ if ($query !== '') {
     $stmt->execute([
         ':title' => $search,
         ':description' => $search,
+        ':director' => $search,
+        ':cast' => $search,
         ':year' => $search
     ]);
 
