@@ -407,3 +407,4 @@ function ensureMovieTmdbData(PDO $db, array &$movie): void
         }
     }
 }
+
