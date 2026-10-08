@@ -501,15 +501,61 @@ require_once __DIR__ . '/includes/header.php';
 ?>
 
 
-<section class="section">
+<section class="section" style="padding-top:20px;">
+
+    <!-- =====================================================
+         BACKDROP BANNER
+    ====================================================== -->
+    <?php if (!empty($movie['backdrop'])): ?>
+        <div
+            style="
+                position:relative;
+                width:100%;
+                height:clamp(220px, 35vw, 420px);
+                margin-top:-20px;
+                margin-bottom:35px;
+                background:
+                    linear-gradient(180deg, rgba(8,8,8,0.1) 0%, rgba(8,8,8,0.7) 70%, #080808 100%),
+                    linear-gradient(90deg, rgba(8,8,8,0.85) 0%, rgba(8,8,8,0.2) 50%, rgba(8,8,8,0.85) 100%),
+                    url('<?= e($movie['backdrop']) ?>') center/cover no-repeat;
+                border-bottom:1px solid #222;
+            "
+        >
+            <div
+                class="container"
+                style="
+                    height:100%;
+                    display:flex;
+                    align-items:flex-end;
+                    padding-bottom:25px;
+                "
+            >
+                <?php if (!empty($movie['tagline'])): ?>
+                    <div
+                        style="
+                            background:rgba(0,0,0,0.65);
+                            backdrop-filter:blur(8px);
+                            border:1px solid rgba(229,9,20,0.4);
+                            color:#fff;
+                            font-style:italic;
+                            padding:8px 16px;
+                            border-radius:20px;
+                            font-size:14px;
+                            letter-spacing:0.3px;
+                        "
+                    >
+                        ✨ &ldquo;<?= e($movie['tagline']) ?>&rdquo;
+                    </div>
+                <?php endif; ?>
+            </div>
+        </div>
+    <?php endif; ?>
 
     <div class="container">
-
 
         <!-- =====================================================
              BACK
         ====================================================== -->
-
         <a
             href="<?= BASE_URL ?>/movies.php"
             style="
@@ -518,8 +564,12 @@ require_once __DIR__ . '/includes/header.php';
                 gap:8px;
                 color:#aaa;
                 text-decoration:none;
-                margin-bottom:30px;
+                margin-bottom:25px;
+                font-size:14px;
+                transition:color 0.2s;
             "
+            onmouseover="this.style.color='#fff'"
+            onmouseout="this.style.color='#aaa'"
         >
             ← Back to Movies
         </a>
@@ -528,150 +578,201 @@ require_once __DIR__ . '/includes/header.php';
         <!-- =====================================================
              MOVIE DETAILS
         ====================================================== -->
-
         <div
             style="
                 display:grid;
-                grid-template-columns:minmax(250px,350px) 1fr;
+                grid-template-columns:minmax(250px,320px) 1fr;
                 gap:45px;
                 align-items:start;
             "
         >
 
-
-            <!-- POSTER -->
-
+            <!-- POSTER COLUMN -->
             <div>
-
-                <div class="movie-poster">
+                <div class="movie-poster" style="box-shadow:0 15px 35px rgba(0,0,0,0.7);border:1px solid #262626;border-radius:12px;overflow:hidden;position:relative;">
 
                     <?php if (!empty($movie['poster'])): ?>
-
                         <img
                             src="<?= e($movie['poster']) ?>"
                             alt="<?= e($movie['title']) ?>"
+                            style="width:100%;display:block;"
                         >
-
                     <?php else: ?>
-
                         <div
                             style="
                                 width:100%;
-                                height:100%;
+                                aspect-ratio:2/3;
                                 display:flex;
                                 align-items:center;
                                 justify-content:center;
                                 color:#777;
+                                background:#151515;
                             "
                         >
                             No Poster
                         </div>
-
                     <?php endif; ?>
-
 
                     <?php if ((int) $movie['is_premium'] === 1): ?>
-
-                        <div class="movie-badge">
-                            Premium
+                        <div class="movie-badge" style="position:absolute;top:12px;right:12px;background:#f5c518;color:#111;padding:4px 10px;border-radius:6px;font-size:12px;font-weight:700;">
+                            👑 Premium
                         </div>
-
                     <?php endif; ?>
-
                 </div>
 
+                <!-- QUICK INFO PILLS -->
+                <div
+                    style="
+                        margin-top:18px;
+                        display:flex;
+                        flex-direction:column;
+                        gap:10px;
+                        background:#141414;
+                        border:1px solid #242424;
+                        border-radius:12px;
+                        padding:16px;
+                    "
+                >
+                    <?php if (!empty($movie['director'])): ?>
+                        <div style="font-size:13px;color:#aaa;">
+                            <span style="color:#666;">Director:</span>
+                            <strong style="color:#fff;display:block;margin-top:2px;">
+                                <?= e($movie['director']) ?>
+                            </strong>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if (!empty($movie['release_date'])): ?>
+                        <div style="font-size:13px;color:#aaa;">
+                            <span style="color:#666;">Release Date:</span>
+                            <span style="color:#ddd;display:block;margin-top:2px;">
+                                <?= !empty($releaseDateFormatted) ? e($releaseDateFormatted) : e($movie['release_date']) ?>
+                            </span>
+                        </div>
+                    <?php endif; ?>
+
+                    <div style="font-size:13px;color:#aaa;">
+                        <span style="color:#666;">Runtime:</span>
+                        <span style="color:#ddd;display:block;margin-top:2px;">
+                            <?= e($durationDisplay) ?> (<?= (int) $movie['duration'] ?> mins)
+                        </span>
+                    </div>
+
+                    <?php if (!empty($movie['tmdb_id'])): ?>
+                        <div style="font-size:12px;color:#666;padding-top:6px;border-top:1px solid #222;display:flex;justify-content:space-between;align-items:center;">
+                            <span>TMDB ID: #<?= (int) $movie['tmdb_id'] ?></span>
+                            <span style="background:#032541;color:#01b4e4;padding:2px 6px;border-radius:4px;font-weight:700;font-size:10px;">TMDB</span>
+                        </div>
+                    <?php endif; ?>
+                </div>
             </div>
 
 
-            <!-- INFORMATION -->
-
+            <!-- INFORMATION COLUMN -->
             <div>
 
                 <h1
                     style="
-                        font-size:clamp(32px,5vw,54px);
-                        margin:0 0 18px;
-                        line-height:1.1;
+                        font-size:clamp(30px,4.5vw,50px);
+                        margin:0 0 12px;
+                        line-height:1.15;
+                        letter-spacing:-0.5px;
                     "
                 >
                     <?= e($movie['title']) ?>
                 </h1>
 
+                <!-- TAGLINE -->
+                <?php if (!empty($movie['tagline'])): ?>
+                    <p
+                        style="
+                            color:#e50914;
+                            font-size:17px;
+                            font-style:italic;
+                            margin:0 0 18px;
+                            font-weight:500;
+                        "
+                    >
+                        &ldquo;<?= e($movie['tagline']) ?>&rdquo;
+                    </p>
+                <?php endif; ?>
 
-                <!-- META -->
 
+                <!-- META BAR -->
                 <div
                     style="
                         display:flex;
                         align-items:center;
-                        gap:20px;
+                        gap:14px;
                         margin-bottom:22px;
                         flex-wrap:wrap;
                     "
                 >
-
+                    <!-- Rating -->
                     <span
                         style="
                             color:#f5c518;
                             font-size:20px;
                             font-weight:700;
+                            display:inline-flex;
+                            align-items:center;
+                            gap:4px;
                         "
                     >
                         ★ <?= number_format((float) $movie['rating'], 1) ?>
                     </span>
 
-                    <span style="color:#aaa;">
-                        <?= $ratingCount ?> ratings
+                    <span style="color:#777;font-size:14px;">
+                        (<?= $ratingCount ?> үнэлгээ)
                     </span>
 
-                    <span style="color:#aaa;">
-                        <?= (int) $movie['release_year'] ?>
+                    <span style="color:#444;">•</span>
+
+                    <!-- Release Date -->
+                    <span style="color:#ccc;font-size:14px;display:inline-flex;align-items:center;gap:5px;">
+                        📅 <?= !empty($releaseDateFormatted) ? e($releaseDateFormatted) : (int) $movie['release_year'] ?>
                     </span>
 
-                    <span style="color:#aaa;">
-                        <?= (int) $movie['duration'] ?> minutes
+                    <span style="color:#444;">•</span>
+
+                    <!-- Duration -->
+                    <span style="color:#ccc;font-size:14px;display:inline-flex;align-items:center;gap:5px;">
+                        ⏱️ <?= e($durationDisplay) ?>
                     </span>
 
-
+                    <!-- Premium/Free -->
                     <?php if ((int) $movie['is_premium'] === 1): ?>
-
                         <span
                             style="
                                 background:#f5c518;
                                 color:#111;
-                                padding:5px 10px;
+                                padding:4px 10px;
                                 border-radius:6px;
-                                font-size:13px;
+                                font-size:12px;
                                 font-weight:700;
                             "
                         >
                             PREMIUM
                         </span>
-
                     <?php else: ?>
-
                         <span
                             style="
                                 background:#263b2d;
                                 color:#65d98b;
-                                padding:5px 10px;
+                                padding:4px 10px;
                                 border-radius:6px;
-                                font-size:13px;
+                                font-size:12px;
                                 font-weight:700;
                             "
                         >
                             FREE
                         </span>
-
                     <?php endif; ?>
-
                 </div>
 
 
                 <!-- GENRES -->
-
                 <?php if (!empty($movieGenres)): ?>
-
                     <div
                         style="
                             display:flex;
@@ -680,13 +781,12 @@ require_once __DIR__ . '/includes/header.php';
                             margin-bottom:25px;
                         "
                     >
-
                         <?php foreach ($movieGenres as $genre): ?>
-
                             <span
                                 style="
                                     border:1px solid #333;
-                                    padding:6px 12px;
+                                    background:rgba(255,255,255,0.03);
+                                    padding:5px 12px;
                                     border-radius:20px;
                                     color:#bbb;
                                     font-size:13px;
@@ -694,32 +794,29 @@ require_once __DIR__ . '/includes/header.php';
                             >
                                 <?= e($genre['name']) ?>
                             </span>
-
                         <?php endforeach; ?>
-
                     </div>
-
                 <?php endif; ?>
 
 
                 <!-- DESCRIPTION -->
-
                 <h2
                     style="
-                        font-size:20px;
-                        margin-bottom:12px;
+                        font-size:19px;
+                        margin-bottom:10px;
+                        color:#eee;
                     "
                 >
-                    About this movie
+                    Киноны тухай / Overview
                 </h2>
-
 
                 <p
                     style="
                         color:#aaa;
                         line-height:1.8;
-                        max-width:750px;
-                        margin-bottom:30px;
+                        max-width:780px;
+                        margin-bottom:28px;
+                        font-size:15px;
                     "
                 >
                     <?= nl2br(e($movie['description'])) ?>
@@ -727,44 +824,105 @@ require_once __DIR__ . '/includes/header.php';
 
 
                 <!-- =================================================
+                     FINANCIALS & INCOME / BOX OFFICE
+                ================================================== -->
+                <?php if (!empty($movie['revenue']) || !empty($movie['budget']) || !empty($movie['director'])): ?>
+                    <div
+                        style="
+                            display:grid;
+                            grid-template-columns:repeat(auto-fit, minmax(170px, 1fr));
+                            gap:16px;
+                            margin-bottom:30px;
+                            padding:20px;
+                            background:#141414;
+                            border:1px solid #262626;
+                            border-radius:14px;
+                            max-width:780px;
+                        "
+                    >
+                        <!-- Income / Revenue -->
+                        <?php if (!empty($movie['revenue'])): ?>
+                            <div style="display:flex;flex-direction:column;gap:4px;">
+                                <span style="font-size:11px;color:#888;text-transform:uppercase;letter-spacing:0.5px;">💰 Box Office / Income</span>
+                                <span style="font-size:19px;font-weight:700;color:#4ade80;">
+                                    $<?= number_format((float) $movie['revenue']) ?>
+                                </span>
+                                <span style="font-size:11px;color:#666;">
+                                    Дэлхий даяарх орлого
+                                </span>
+                            </div>
+                        <?php endif; ?>
+
+                        <!-- Budget -->
+                        <?php if (!empty($movie['budget'])): ?>
+                            <div style="display:flex;flex-direction:column;gap:4px;">
+                                <span style="font-size:11px;color:#888;text-transform:uppercase;letter-spacing:0.5px;">💼 Төсөв / Budget</span>
+                                <span style="font-size:19px;font-weight:700;color:#f3f4f6;">
+                                    $<?= number_format((float) $movie['budget']) ?>
+                                </span>
+                                <span style="font-size:11px;color:#666;">
+                                    Бүтээсэн нийт зардал
+                                </span>
+                            </div>
+                        <?php endif; ?>
+
+                        <!-- Net Profit / Return -->
+                        <?php if (!empty($movie['revenue']) && !empty($movie['budget'])): ?>
+                            <?php $netIncome = (float) $movie['revenue'] - (float) $movie['budget']; ?>
+                            <div style="display:flex;flex-direction:column;gap:4px;">
+                                <span style="font-size:11px;color:#888;text-transform:uppercase;letter-spacing:0.5px;">📈 Цэвэр ашиг / Net Return</span>
+                                <span style="font-size:19px;font-weight:700;color:<?= $netIncome >= 0 ? '#4ade80' : '#f87171' ?>;">
+                                    <?= $netIncome >= 0 ? '+$' . number_format($netIncome) : '-$' . number_format(abs($netIncome)) ?>
+                                </span>
+                                <span style="font-size:11px;color:#666;">
+                                    <?= $netIncome >= 0 ? 'Box Office Hit' : 'Ашиггүй' ?>
+                                </span>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                <?php endif; ?>
+
+
+                <!-- =================================================
                      ACTION BUTTONS
                 ================================================== -->
-
                 <div
                     style="
                         display:flex;
                         gap:12px;
                         flex-wrap:wrap;
+                        align-items:center;
                     "
                 >
-
                     <!-- WATCH / PREMIUM -->
-
-<?php if ($isPremiumMovie && !$hasPremiumAccess): ?>
-
-    <a
-        href="<?= BASE_URL ?>/subscription.php"
-        class="btn btn-primary"
-    >
-        👑 Get Premium
-    </a>
-
-<?php else: ?>
-
-    <a
-        href="<?= BASE_URL ?>/watch.php?id=<?= (int) $movie['id'] ?>"
-        class="btn btn-primary"
-    >
-        ▶ Watch Now
-    </a>
-
-<?php endif; ?>
+                    <?php if ($isPremiumMovie && !$hasPremiumAccess): ?>
+                        <a
+                            href="<?= BASE_URL ?>/subscription.php"
+                            class="btn btn-primary"
+                        >
+                            👑 Get Premium
+                        </a>
+                    <?php else: ?>
+                        <a
+                            href="<?= BASE_URL ?>/watch.php?id=<?= (int) $movie['id'] ?>"
+                            class="btn btn-primary"
+                        >
+                            ▶ Watch Now
+                        </a>
+                    <?php endif; ?>
 
 
-                    <!-- TRAILER -->
-
-                    <?php if (!empty($movie['trailer_url'])): ?>
-
+                    <!-- WATCH TRAILER -->
+                    <?php if (!empty($ytTrailerKey)): ?>
+                        <button
+                            type="button"
+                            onclick="openTrailerModal()"
+                            class="btn btn-secondary"
+                            style="cursor:pointer;"
+                        >
+                            🎬 Watch Trailer
+                        </button>
+                    <?php elseif (!empty($movie['trailer_url'])): ?>
                         <a
                             href="<?= e($movie['trailer_url']) ?>"
                             target="_blank"
@@ -773,132 +931,104 @@ require_once __DIR__ . '/includes/header.php';
                         >
                             🎬 Watch Trailer
                         </a>
-
                     <?php endif; ?>
 
 
                     <!-- WATCHLIST -->
-
                     <?php if ($currentUser): ?>
-
                         <?php if ($isInWatchlist): ?>
-
                             <form
                                 method="POST"
                                 action="<?= BASE_URL ?>/movie.php?id=<?= (int) $movie['id'] ?>"
+                                style="margin:0;"
                             >
-
                                 <?= csrfField() ?>
-
                                 <input
                                     type="hidden"
                                     name="action"
                                     value="remove_watchlist"
                                 >
-
                                 <button
                                     type="submit"
                                     class="btn btn-secondary"
                                 >
                                     ❤️ Remove from Watchlist
                                 </button>
-
                             </form>
-
                         <?php else: ?>
-
                             <form
                                 method="POST"
                                 action="<?= BASE_URL ?>/movie.php?id=<?= (int) $movie['id'] ?>"
+                                style="margin:0;"
                             >
-
                                 <?= csrfField() ?>
-
                                 <input
                                     type="hidden"
                                     name="action"
                                     value="add_watchlist"
                                 >
-
                                 <button
                                     type="submit"
                                     class="btn btn-secondary"
                                 >
                                     🤍 Add to Watchlist
                                 </button>
-
                             </form>
-
                         <?php endif; ?>
-
                     <?php else: ?>
-
                         <a
                             href="<?= BASE_URL ?>/login.php"
                             class="btn btn-secondary"
                         >
                             🤍 Sign in to Save
                         </a>
-
                     <?php endif; ?>
 
                 </div>
 
 
                 <!-- =================================================
-                     RATING
+                     RATING WIDGET
                 ================================================== -->
-
                 <div
                     style="
                         margin-top:35px;
-                        padding:25px;
+                        padding:22px;
                         background:#151515;
                         border:1px solid #292929;
                         border-radius:16px;
                         max-width:650px;
                     "
                 >
-
-                    <h3 style="margin:0 0 8px;">
+                    <h3 style="margin:0 0 8px;font-size:17px;">
                         ⭐ Rate this movie
                     </h3>
 
-
                     <?php if ($currentUser): ?>
-
                         <p
                             style="
                                 color:#888;
-                                margin:0 0 18px;
+                                margin:0 0 16px;
+                                font-size:14px;
                             "
                         >
                             <?php if ($userRating > 0): ?>
-
-                                Your rating:
-                                <?= $userRating ?>/5
-
+                                Your rating: <strong style="color:#f5c518;"><?= $userRating ?>/5</strong>
                             <?php else: ?>
-
                                 Choose a rating from 1 to 5.
-
                             <?php endif; ?>
                         </p>
-
 
                         <form
                             method="POST"
                             action="<?= BASE_URL ?>/movie.php?id=<?= (int) $movie['id'] ?>"
                         >
-
                             <?= csrfField() ?>
-
                             <input
                                 type="hidden"
                                 name="action"
                                 value="rate_movie"
                             >
-
 
                             <div
                                 style="
@@ -907,9 +1037,7 @@ require_once __DIR__ . '/includes/header.php';
                                     flex-wrap:wrap;
                                 "
                             >
-
                                 <?php for ($i = 1; $i <= 5; $i++): ?>
-
                                     <button
                                         type="submit"
                                         name="rating"
@@ -919,40 +1047,30 @@ require_once __DIR__ . '/includes/header.php';
                                             background:<?= $i <= $userRating ? 'rgba(245,197,24,.15)' : '#101010' ?>;
                                             color:#f5c518;
                                             border-radius:10px;
-                                            padding:10px 14px;
+                                            padding:8px 14px;
                                             cursor:pointer;
-                                            font-size:20px;
+                                            font-size:18px;
+                                            transition:transform 0.1s, border-color 0.2s;
                                         "
                                         title="<?= $i ?> star"
                                     >
                                         ★
                                     </button>
-
                                 <?php endfor; ?>
-
                             </div>
-
                         </form>
-
                     <?php else: ?>
-
-                        <p style="color:#888;margin:0;">
-
+                        <p style="color:#888;margin:0;font-size:14px;">
                             Please
-
                             <a
                                 href="<?= BASE_URL ?>/login.php"
                                 style="color:#e50914;"
                             >
                                 sign in
                             </a>
-
                             to rate this movie.
-
                         </p>
-
                     <?php endif; ?>
-
                 </div>
 
             </div>
@@ -961,48 +1079,268 @@ require_once __DIR__ . '/includes/header.php';
 
 
         <!-- =====================================================
-             TRAILER
+             TOP CAST / ЖҮЖИГЧИД
         ====================================================== -->
+        <?php if (!empty($castList)): ?>
+            <div style="margin-top:65px;">
 
-        <?php if (!empty($movie['trailer_url'])): ?>
+                <div
+                    style="
+                        display:flex;
+                        align-items:center;
+                        justify-content:space-between;
+                        margin-bottom:22px;
+                        gap:15px;
+                        flex-wrap:wrap;
+                    "
+                >
+                    <h2 class="section-title" style="margin:0;">
+                        👥 Top Cast / Кинонд тоглосон жүжигчид
+                    </h2>
 
-            <div style="margin-top:70px;">
+                    <span style="color:#777;font-size:14px;">
+                        <?= count($castList) ?> жүжигчин
+                    </span>
+                </div>
+
+                <div
+                    style="
+                        display:grid;
+                        grid-template-columns:repeat(auto-fill, minmax(130px, 1fr));
+                        gap:16px;
+                    "
+                >
+                    <?php foreach ($castList as $actor): ?>
+                        <div
+                            style="
+                                background:#141414;
+                                border:1px solid #262626;
+                                border-radius:12px;
+                                padding:14px 10px;
+                                text-align:center;
+                                transition:transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+                            "
+                            onmouseover="this.style.borderColor='#e50914';this.style.transform='translateY(-4px)';this.style.boxShadow='0 10px 25px rgba(0,0,0,0.6)'"
+                            onmouseout="this.style.borderColor='#262626';this.style.transform='none';this.style.boxShadow='none'"
+                        >
+                            <div
+                                style="
+                                    width:76px;
+                                    height:76px;
+                                    border-radius:50%;
+                                    overflow:hidden;
+                                    margin:0 auto 10px;
+                                    background:#202020;
+                                    border:2px solid #333;
+                                "
+                            >
+                                <?php if (!empty($actor['profile'])): ?>
+                                    <img
+                                        src="<?= e($actor['profile']) ?>"
+                                        alt="<?= e($actor['name']) ?>"
+                                        loading="lazy"
+                                        style="width:100%;height:100%;object-fit:cover;"
+                                    >
+                                <?php else: ?>
+                                    <div
+                                        style="
+                                            width:100%;
+                                            height:100%;
+                                            display:flex;
+                                            align-items:center;
+                                            justify-content:center;
+                                            color:#666;
+                                            font-size:26px;
+                                        "
+                                    >
+                                        👤
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+
+                            <div
+                                style="
+                                    font-weight:700;
+                                    font-size:13px;
+                                    color:#fff;
+                                    margin-bottom:3px;
+                                    white-space:nowrap;
+                                    overflow:hidden;
+                                    text-overflow:ellipsis;
+                                "
+                                title="<?= e($actor['name']) ?>"
+                            >
+                                <?= e($actor['name']) ?>
+                            </div>
+
+                            <div
+                                style="
+                                    font-size:11px;
+                                    color:#888;
+                                    white-space:nowrap;
+                                    overflow:hidden;
+                                    text-overflow:ellipsis;
+                                "
+                                title="<?= e($actor['character']) ?>"
+                            >
+                                <?= e($actor['character'] ?: 'Cast') ?>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+
+            </div>
+        <?php endif; ?>
+
+
+        <!-- =====================================================
+             TRAILER SECTION
+        ====================================================== -->
+        <?php if (!empty($ytTrailerKey) || !empty($movie['trailer_url'])): ?>
+            <div id="trailer-section" style="margin-top:65px;">
 
                 <h2 class="section-title">
-                    Trailer
+                    🎬 Official Trailer
                 </h2>
 
                 <div
                     style="
-                        margin-top:25px;
-                        max-width:900px;
+                        margin-top:22px;
+                        max-width:960px;
+                        position:relative;
+                        border-radius:14px;
+                        overflow:hidden;
+                        border:1px solid #292929;
+                        background:#000;
                     "
                 >
-
-                    <video
-                        controls
-                        preload="metadata"
-                        style="
-                            width:100%;
-                            display:block;
-                            border-radius:14px;
-                            background:#000;
-                        "
-                    >
-
-                        <source
-                            src="<?= e($movie['trailer_url']) ?>"
-                            type="video/mp4"
+                    <?php if (!empty($ytTrailerKey)): ?>
+                        <div style="position:relative;padding-bottom:56.25%;height:0;">
+                            <iframe
+                                src="https://www.youtube-nocookie.com/embed/<?= e($ytTrailerKey) ?>?rel=0"
+                                title="<?= e($movie['title']) ?> Trailer"
+                                style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen
+                            ></iframe>
+                        </div>
+                    <?php else: ?>
+                        <video
+                            controls
+                            preload="metadata"
+                            style="width:100%;display:block;background:#000;"
                         >
-
-                        Your browser does not support video playback.
-
-                    </video>
-
+                            <source
+                                src="<?= e($movie['trailer_url']) ?>"
+                                type="video/mp4"
+                            >
+                            Your browser does not support video playback.
+                        </video>
+                    <?php endif; ?>
                 </div>
 
             </div>
+        <?php endif; ?>
 
+
+        <!-- =====================================================
+             TRAILER MODAL
+        ====================================================== -->
+        <?php if (!empty($ytTrailerKey)): ?>
+            <div
+                id="trailerModal"
+                style="
+                    display:none;
+                    position:fixed;
+                    inset:0;
+                    z-index:9999;
+                    background:rgba(0,0,0,0.88);
+                    backdrop-filter:blur(8px);
+                    align-items:center;
+                    justify-content:center;
+                    padding:20px;
+                "
+                onclick="if(event.target === this) closeTrailerModal()"
+            >
+                <div
+                    style="
+                        position:relative;
+                        width:100%;
+                        max-width:920px;
+                        background:#111;
+                        border:1px solid #333;
+                        border-radius:14px;
+                        overflow:hidden;
+                        box-shadow:0 25px 60px rgba(0,0,0,0.9);
+                    "
+                >
+                    <div
+                        style="
+                            display:flex;
+                            align-items:center;
+                            justify-content:space-between;
+                            padding:14px 20px;
+                            border-bottom:1px solid #222;
+                        "
+                    >
+                        <div style="font-weight:700;font-size:15px;color:#fff;">
+                            🎬 <?= e($movie['title']) ?> - Official Trailer
+                        </div>
+
+                        <button
+                            type="button"
+                            onclick="closeTrailerModal()"
+                            style="
+                                background:none;
+                                border:none;
+                                color:#aaa;
+                                font-size:26px;
+                                cursor:pointer;
+                                line-height:1;
+                                padding:0 6px;
+                            "
+                            onmouseover="this.style.color='#fff'"
+                            onmouseout="this.style.color='#aaa'"
+                        >
+                            &times;
+                        </button>
+                    </div>
+
+                    <div style="position:relative;padding-bottom:56.25%;height:0;">
+                        <iframe
+                            id="trailerModalIframe"
+                            src=""
+                            style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen
+                        ></iframe>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+            function openTrailerModal() {
+                var modal = document.getElementById('trailerModal');
+                var iframe = document.getElementById('trailerModalIframe');
+                if (modal && iframe) {
+                    iframe.src = 'https://www.youtube-nocookie.com/embed/<?= e($ytTrailerKey) ?>?autoplay=1&rel=0';
+                    modal.style.display = 'flex';
+                }
+            }
+            function closeTrailerModal() {
+                var modal = document.getElementById('trailerModal');
+                var iframe = document.getElementById('trailerModalIframe');
+                if (modal && iframe) {
+                    iframe.src = '';
+                    modal.style.display = 'none';
+                }
+            }
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closeTrailerModal();
+                }
+            });
+            </script>
         <?php endif; ?>
 
 
