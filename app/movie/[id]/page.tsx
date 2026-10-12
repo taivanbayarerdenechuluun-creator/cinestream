@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { getMovieById, movieSections } from '@/lib/movie-data';
 import MovieCard from '../../components/MovieCard';
 import ScrollReveal from '../../components/ScrollReveal';
+import WatchNowLink from '../../components/WatchNowLink';
 
 export default function MovieDetailPage({ params }: { params: { id: string } }) {
   const movie = getMovieById(params.id);
@@ -35,11 +36,10 @@ export default function MovieDetailPage({ params }: { params: { id: string } }) 
             </div>
             <p className="summary">{movie.description}</p>
             <div className="detail-actions">
-              <button className="primary-button" type="button" disabled aria-describedby="playback-note">Watch now</button>
+              <WatchNowLink movieId={movie.id} title={movie.title} />
               <a href={trailerSearch} className="ghost-button" target="_blank" rel="noreferrer">Watch trailer</a>
               <Link href="/movies" className="ghost-button">Browse more</Link>
             </div>
-            <p className="playback-note" id="playback-note">Full movie playback is unavailable for this catalog title because no video source is configured.</p>
           </div>
         </div>
       </article>

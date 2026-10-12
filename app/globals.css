@@ -547,6 +547,76 @@ img {
   color: var(--text-muted);
 }
 
+.search-page { max-width: 1000px; }
+.catalog-search {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 62px;
+  padding: 0 18px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  color: var(--text-soft);
+  background: var(--panel);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, .14);
+  transition: border-color .2s ease, box-shadow .2s ease, background .25s ease;
+}
+.catalog-search:focus-within {
+  border-color: var(--red);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--red) 15%, transparent), 0 14px 36px rgba(0, 0, 0, .14);
+}
+.catalog-search svg {
+  flex: 0 0 22px;
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+}
+.catalog-search input {
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+  padding: 16px 0;
+  border: 0;
+  outline: 0;
+  color: var(--text);
+  background: transparent;
+  font: inherit;
+  font-size: 1rem;
+}
+.catalog-search input:focus-visible { outline: 0; }
+.catalog-search input::placeholder { color: var(--text-muted); }
+.search-clear {
+  padding: 8px 10px;
+  border: 0;
+  border-radius: 8px;
+  color: var(--text-soft);
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
+}
+.search-clear:hover { color: var(--text); background: var(--bg-soft); }
+.search-status {
+  min-height: 44px;
+  padding: 15px 2px 8px;
+  color: var(--text-muted);
+  font-size: .9rem;
+}
+.search-empty {
+  margin-top: 24px;
+  padding: clamp(36px, 7vw, 80px) 24px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  text-align: center;
+  background: var(--panel);
+}
+.search-empty .eyebrow { margin-bottom: 12px; }
+.search-empty h2 { margin: 0; font-size: clamp(1.5rem, 3vw, 2.2rem); }
+.search-empty p { margin: 12px auto 0; max-width: 440px; color: var(--text-muted); line-height: 1.6; }
+.search-empty .ghost-button { margin-top: 22px; cursor: pointer; font: inherit; }
+
 .carousel-shell {
   position: relative;
 }
@@ -762,6 +832,7 @@ img {
   .hero-section h1 { font-size: clamp(2.4rem, 12vw, 3.4rem); }
   .nav-actions { gap: 8px; }
   .theme-toggle-label { display: none; }
+  .catalog-search { min-height: 56px; padding: 0 13px; }
 }
 
 .section-link { transition: color .2s ease, transform .2s ease; }
