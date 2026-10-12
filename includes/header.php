@@ -22,6 +22,14 @@ $pageTitle = $pageTitle ?? 'CineStream';
 
     <title><?= e($pageTitle) ?> - CineStream</title>
 
+    <script>
+        try {
+            document.documentElement.dataset.theme = localStorage.getItem('cinestream-theme') === 'light' ? 'light' : 'dark';
+        } catch (error) {
+            document.documentElement.dataset.theme = 'dark';
+        }
+    </script>
+
     <link
         rel="stylesheet"
         href="<?= BASE_URL ?>/assets/css/style.css"
@@ -70,6 +78,11 @@ $pageTitle = $pageTitle ?? 'CineStream';
 
         <!-- Right Side -->
         <div class="nav-right">
+
+            <button type="button" class="theme-toggle" data-theme-toggle aria-label="Switch color theme">
+                <svg class="theme-toggle-icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.5"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></svg>
+                <span class="theme-toggle-label">Light</span>
+            </button>
 
             <?php if ($currentUser): ?>
 

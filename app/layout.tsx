@@ -1,6 +1,7 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import ThemeToggle from './components/ThemeToggle';
 
 export const metadata: Metadata = {
   title: 'CineStream',
@@ -9,7 +10,14 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try { var savedTheme = localStorage.getItem('cinestream-theme'); document.documentElement.dataset.theme = savedTheme === 'light' ? 'light' : 'dark'; } catch (_) { document.documentElement.dataset.theme = 'dark'; }`,
+          }}
+        />
+      </head>
       <body>
         <header className="site-header">
           <div className="nav-shell">
@@ -24,6 +32,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <Link href="/#upcoming">Upcoming</Link>
             </nav>
             <div className="nav-actions">
+              <ThemeToggle />
               <Link href="/movies" className="ghost-button">
                 Browse
               </Link>

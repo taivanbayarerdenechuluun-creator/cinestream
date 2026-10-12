@@ -1249,6 +1249,9 @@ require_once __DIR__ . '/includes/header.php';
         <?php if (!empty($ytTrailerKey)): ?>
             <div
                 id="trailerModal"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="trailerModalTitle"
                 style="
                     display:none;
                     position:fixed;
@@ -1283,12 +1286,13 @@ require_once __DIR__ . '/includes/header.php';
                             border-bottom:1px solid #222;
                         "
                     >
-                        <div style="font-weight:700;font-size:15px;color:#fff;">
+                        <div id="trailerModalTitle" style="font-weight:700;font-size:15px;color:#fff;">
                             🎬 <?= e($movie['title']) ?> - Official Trailer
                         </div>
 
                         <button
                             type="button"
+                            aria-label="Close trailer"
                             onclick="closeTrailerModal()"
                             style="
                                 background:none;
@@ -1309,6 +1313,7 @@ require_once __DIR__ . '/includes/header.php';
                     <div style="position:relative;padding-bottom:56.25%;height:0;">
                         <iframe
                             id="trailerModalIframe"
+                            title="<?= e($movie['title']) ?> trailer"
                             src=""
                             style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -1319,12 +1324,17 @@ require_once __DIR__ . '/includes/header.php';
             </div>
 
             <script>
+            var trailerModalReturnFocus = null;
             function openTrailerModal() {
                 var modal = document.getElementById('trailerModal');
                 var iframe = document.getElementById('trailerModalIframe');
                 if (modal && iframe) {
+                    trailerModalReturnFocus = document.activeElement;
                     iframe.src = 'https://www.youtube-nocookie.com/embed/<?= e($ytTrailerKey) ?>?autoplay=1&rel=0';
                     modal.style.display = 'flex';
+                    document.body.style.overflow = 'hidden';
+                    var closeButton = modal.querySelector('button');
+                    if (closeButton) closeButton.focus();
                 }
             }
             function closeTrailerModal() {
@@ -1333,11 +1343,28 @@ require_once __DIR__ . '/includes/header.php';
                 if (modal && iframe) {
                     iframe.src = '';
                     modal.style.display = 'none';
+                    document.body.style.overflow = '';
+                    if (trailerModalReturnFocus && typeof trailerModalReturnFocus.focus === 'function') {
+                        trailerModalReturnFocus.focus();
+                    }
                 }
             }
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'Escape') {
                     closeTrailerModal();
+                    return;
+                }
+                var modal = document.getElementById('trailerModal');
+                if (!modal || modal.style.display !== 'flex' || e.key !== 'Tab') return;
+                var focusable = modal.querySelectorAll('button, iframe');
+                var first = focusable[0];
+                var last = focusable[focusable.length - 1];
+                if (e.shiftKey && document.activeElement === first) {
+                    e.preventDefault();
+                    last.focus();
+                } else if (!e.shiftKey && document.activeElement === last) {
+                    e.preventDefault();
+                    first.focus();
                 }
             });
             </script>

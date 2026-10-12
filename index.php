@@ -874,7 +874,7 @@ require_once __DIR__ . '/includes/header.php';
 
                 </div>
 
-                <div class="movie-grid">
+                <div class="movie-grid movie-rail">
 
                     <?php foreach ($featuredMovies as $movie): ?>
 
@@ -1024,7 +1024,7 @@ require_once __DIR__ . '/includes/header.php';
 
                 </div>
 
-                <div class="movie-grid">
+                <div class="movie-grid movie-rail">
 
                     <?php foreach ($latestMovies as $movie): ?>
 
@@ -1144,7 +1144,7 @@ require_once __DIR__ . '/includes/header.php';
 
                 </div>
 
-                <div class="movie-grid">
+                <div class="movie-grid movie-rail">
 
                     <?php foreach ($premiumMovies as $movie): ?>
 
@@ -1260,7 +1260,7 @@ require_once __DIR__ . '/includes/header.php';
 
                 </div>
 
-                <div class="movie-grid">
+                <div class="movie-grid movie-rail">
 
                     <?php foreach ($moreMovies as $movie): ?>
 
