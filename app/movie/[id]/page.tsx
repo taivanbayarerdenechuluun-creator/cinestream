@@ -34,12 +34,17 @@ export default function MovieDetailPage({ params }: { params: { id: string } }) 
             </div>
             <p className="summary">{movie.description}</p>
             <div className="detail-actions">
-                <div>
-    <p>Watch</p>
-    </div>
-              <Link href="/movies" className="primary-button">
-                Watch trailer
+              <Link href={`/watch.php?id=${movie.id}`} className="primary-button" aria-label={`Watch ${movie.title}`}>
+                ▶ Watch now
               </Link>
+              <a
+                href={`https://www.youtube.com/results?search_query=${encodeURIComponent(`${movie.title} ${movie.year} official trailer`)}`}
+                className="ghost-button"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Watch trailer
+              </a>
               <Link href="/movies" className="ghost-button">
                 Browse more
               </Link>
