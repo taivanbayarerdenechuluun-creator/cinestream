@@ -35,7 +35,7 @@ export default function MovieDetailPage({ params }: { params: { id: string } }) 
             <p className="summary">{movie.description}</p>
             <div className="detail-actions">
                 <div>
-    <p>hidugiugoug</p>
+    <p>Watch</p>
     </div>
               <Link href="/movies" className="primary-button">
                 Watch trailer
